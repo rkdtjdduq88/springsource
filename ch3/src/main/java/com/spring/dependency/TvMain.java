@@ -5,8 +5,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class TvMain {
 //	String str = "String"; // == new 와 같은 역할
-	
-
 	public static void main(String[] args) {
 		
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("config.xml");
