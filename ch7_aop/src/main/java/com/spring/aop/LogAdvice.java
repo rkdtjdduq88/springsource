@@ -46,7 +46,7 @@ public class LogAdvice {
 	public void aroundLog(ProceedingJoinPoint pjp) {
 		System.out.println("[공통로그] 비즈니스 로직 수행 전 호출 됨");
 		try {
-			pjp.proceed();
+			pjp.proceed(); // 처리해야 하는 메소드 호출됨
 		} catch (Throwable e) {			
 			e.printStackTrace();
 		}

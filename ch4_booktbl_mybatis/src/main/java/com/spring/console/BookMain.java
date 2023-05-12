@@ -19,18 +19,18 @@ public class BookMain {
 		BookService service = (BookService) ctx.getBean("bookService");
 //		
 //		// 도서 추가
-//		BookDTO insertDto = new BookDTO(1007, "댕댕이", "댕굴이", 23000, null);
-//		if(service.insertBook(insertDto)) {
-//			System.out.println("입력성공");
-//		}
+		BookDTO insertDto = new BookDTO(1008, "댕굴이", "댕굴이야", 26800, "댕구리댕구리댕구리");
+		if(service.insertBook(insertDto)) {
+			System.out.println("입력성공");
+		}
 //		
 //		// 도서 업데이트(수정)
 //		BookDTO updateDto = new BookDTO();
 //		updateDto.setCode(1001);
 //		updateDto.setPrice(30000);
-		if(service.updateBook(30000,1002)){
-			System.out.println("수정성공");
-		}		
+//		if(service.updateBook(30000,1002)){
+//			System.out.println("수정성공");
+//		}		
 //		
 //		// 도서 상세 조회
 //		BookDTO row = service.getBook(1001);
