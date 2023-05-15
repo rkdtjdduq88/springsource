@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.spring.domain.LoginDTO;
+import com.spring.domain.RegisterDTO;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -48,12 +51,23 @@ public class MemberController {
 //	}
 	
 	
+//	@PostMapping("/login")
+//	public void loginPost(@RequestParam("userid") String id, String password) {
+//		log.info("login post.....");				
+//		// 사용자 입력값 id, password
+//		System.out.println("id "+id);
+//		System.out.println("password "+password);
+//	}
+	
 	@PostMapping("/login")
-	public void loginPost(@RequestParam("userid") String id, String password) {
+	public String loginPost(LoginDTO dto) {
 		log.info("login post.....");				
 		// 사용자 입력값 id, password
-		System.out.println("id "+id);
-		System.out.println("password "+password);
+		System.out.println("id "+dto.getId());
+		System.out.println("password "+dto.getPassword());
+		
+		// main.jsp 보여주기
+		return "/member/main";
 	}
 	
 	//@RequestMapping("/register")  // http://localhost:8080/member/register
@@ -62,4 +76,20 @@ public class MemberController {
 		log.info("register.....");
 		//return "/member/register"; // 리턴이 있다면 /WEB-INF/views/register.jsp
 	}
+	
+	// /member/register + POST 처리
+	// DTO 작성
+	// 사용자 입력값이 잘 들어왔는지 확인
+	// login.jsp 보여주기
+	@PostMapping("/register")
+	public String registerPost(RegisterDTO dto) {
+		log.info("회원가입 요청");
+		log.info("id "+dto.toString());	
+		
+		// redirect : 붙게 되면 viewResolver 가 도는 것이 아니라 다시한번 DispatcherServlet 이 동작
+		// == response.sendRedirect() 
+		// http://localhost:8080/member/login + GET 요청
+		return "redirect:/member/login";
+	}
+	
 }
