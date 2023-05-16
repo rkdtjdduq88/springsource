@@ -27,7 +27,7 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public boolean update(BookDTO dto) {
-		return false;
+		return mapper.update(dto)==1?true:false;
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public List<BookDTO> getSearchList(String criteria, String keyword) {
-		return null;
+		return mapper.search(criteria, keyword);
 	}
 
 }

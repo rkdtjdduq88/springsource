@@ -1,0 +1,12 @@
+package com.spring.service;
+
+import java.util.List;
+
+import com.spring.domain.AuthDTO;
+import com.spring.domain.LoginDTO;
+import com.spring.domain.MemberDTO;
+
+public interface MemberService {
+	public AuthDTO login(LoginDTO loginDTO);
+	public boolean register(MemberDTO memberDTO);
+}
