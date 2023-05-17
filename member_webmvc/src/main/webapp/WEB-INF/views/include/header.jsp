@@ -109,10 +109,10 @@
          		 <a class="nav-link" href='<c:url value="/member/logout"/>'>로그아웃</a>         	
       		</li>
       		<li class="nav-item">
-         		 <a class="nav-link" href='<c:url value="/changePwd.jsp"/>'>비밀변호변경</a>         	
+         		 <a class="nav-link" href='<c:url value="/member/changePwd"/>'>비밀변호변경</a>         	
       		</li>
       		<li class="nav-item">
-         		 <a class="nav-link" href='<c:url value="/leave.jsp"/>'>회원탈퇴</a>         	
+         		 <a class="nav-link" href='<c:url value="/member/leave"/>'>회원탈퇴</a>         	
       		</li>
         	<li class="nav-item">
          		 <a class="nav-link" href="">회원조회</a>

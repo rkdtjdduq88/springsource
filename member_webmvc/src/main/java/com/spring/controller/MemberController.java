@@ -8,9 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.domain.AuthDTO;
+import com.spring.domain.ChangeDTO;
 import com.spring.domain.LoginDTO;
 import com.spring.domain.MemberDTO;
 import com.spring.service.MemberService;
@@ -74,6 +76,53 @@ public class MemberController {
 		model.addAttribute("memberDTO", memberDTO);
 		return "redirect:/member/login";		
 	}	
+	
+	// 중복 아이디
+	@PostMapping("/dupId")
+	@ResponseBody // 컨트롤러 작업이 완료될 때 결과값으로 리턴시킴(ViewResolver 동작시키지 않음)
+	public String dupIdCheck(String userid) {
+		log.info("중복 아이디 체크 "+userid);
+		boolean idCheck = service.dupId(userid);
+		if(idCheck) {
+			return "true"; // /WEB-INF/views/true.jsp 찾으려고 함
+		}else {
+			return "false"; // /WEB-INF/views/false.jsp
+		}
+		
+	}
+	@GetMapping("/leave")
+	public void leaveGet() {
+		log.info("회원 탈퇴 요청");
+	}
+	@PostMapping("/leave")
+	public String leavePost(LoginDTO loginDTO,HttpSession session) {
+		log.info("회원 탈퇴 "+loginDTO);		 
+		if(service.remove(loginDTO)) {
+			session.invalidate();
+			return "redirect:/";			
+		}else {
+			return "redirect:/member/leave";
+		}
+	}
+	@GetMapping("/changePwd")
+	public void changePwdGet() {
+		log.info("비밀번호 변경 페이지 요청");
+	}
+	@PostMapping("/changePwd")
+	public String changePwdPost(ChangeDTO changeDTO,HttpSession session) {
+		log.info("비밀번호 변경 요청 "+changeDTO);	
+		
+		if(changeDTO.passwordEquals()) {
+			// 현재 비밀번호 일치 확인		
+			// true : 비밀번호 변경 ==> session 제거 ==> 로그인 페이지 보여주기
+			// false : 회원탈퇴 페이지 보여주기
+			if(service.update(changeDTO)) {			
+				session.invalidate();
+				return "redirect:/member/login";			
+			}			
+		}
+		return "redirect:/member/leave";		
+	}
 }
 
 

@@ -13,4 +13,16 @@
 	<insert id="insert">
 		insert into membertbl(userid,password,name,gender,email) values(#{userid},#{password},#{name},#{gender},#{email})	
 	</insert>
+	<!-- <select id="dupId" resultType="java.lang.String">
+		select userid from membertbl where userid = #{userid}
+	</select> -->
+	<select id="dupId" resultType="java.lang.Integer">
+		select count(*) from membertbl where userid = #{userid}
+	</select>
+	<delete id="leave">
+		delete from membertbl where userid=#{userid}
+	</delete>
+	<update id="update">
+		update membertbl set password=#{newPassword} where userid=#{userid}
+	</update>
 </mapper>
