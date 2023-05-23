@@ -14,7 +14,13 @@
 		<org.slf4j-version>2.0.7</org.slf4j-version>
 	</properties>
 	<dependencies>
-	<!-- Logging -->
+				<!-- 자바 객체 ==> json 자동 형변환 -->
+				<dependency>
+   				    <groupId>com.fasterxml.jackson.core</groupId>
+    				<artifactId>jackson-databind</artifactId>
+    				<version>2.15.1</version>
+				</dependency>	
+				<!-- Logging -->
 				<dependency>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
