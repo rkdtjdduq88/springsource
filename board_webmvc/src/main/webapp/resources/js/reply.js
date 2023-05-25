@@ -48,9 +48,11 @@ let replyService = (function () {
         return response.json();
       })
       .then((data) => {
+        console.log("리스트와 개수");
+        console.log(data);
         //data 가 도착해서 함수가 호출되면 넘겨받은 함수 호출
         if (callback) {
-          callback(data);
+          callback(data.replyCnt, data.list);
         }
       })
       .catch((error) => console.log(error));
@@ -91,7 +93,7 @@ let replyService = (function () {
         (mm > 9 ? "" : "0") + mm, // 월이 두자리면 그냥 넘어가고 한자리면 앞자리에 "0" 붙이기
         "/",
         (dd > 9 ? "" : "0") + dd,
-      ].join();
+      ].join("");
     }
   } // 댓글 시간넣기 종료
 
@@ -109,12 +111,56 @@ let replyService = (function () {
         }
       })
       .catch((error) => console.log(error));
-  }
+  } // 댓글 하나 불러오기 종료
 
+  function update(reply, callback) {
+    fetch("/replies/" + reply.rno, {
+      method: "put",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(reply),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("수정 실패");
+        }
+        return response.text();
+      })
+      .then((data) => {
+        if (callback) {
+          //data 도착하면 콜백 호출해줘
+          callback(data);
+        }
+      })
+      .catch((error) => console.log(error));
+  } // 댓글 수정 종료
+
+  function remove(rno, callback) {
+    fetch("/replies/" + rno, {
+      method: "delete",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("삭제 불가");
+        }
+        return response.text();
+      })
+      .then((data) => {
+        if (callback) {
+          callback(data);
+        }
+      })
+      .catch((error) => console.log(error));
+  } /// 댓글 삭제 종료
+
+  // 외부에서 접근 가능한 함수 지정
   return {
     add: add,
     getList: getList,
     displayTime: displayTime,
     get: get,
+    update: update,
+    remove: remove,
   };
 })();
