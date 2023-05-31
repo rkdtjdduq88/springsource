@@ -39,42 +39,29 @@ function showUploadedFile(uploadResultArr) {
     // fileType 이 true 라면 image 파일이라면 썸네일 이미지 보여주기
     if (item.fileType) {
       // 썸네일 이미지 경로 생성
-      let fileCallPath = encodeURIComponent(
-        item.uploadPath + "\\s_" + item.uuid + "_" + item.fileName
-      );
+      let fileCallPath = encodeURIComponent(item.uploadPath + "\\s_" + item.uuid + "_" + item.fileName);
       //str += "<li><img src='/display?fileName=" + fileCallPath + "'></li>";
 
       // 썸네일 이미지 클릭 ==> 원본 이미지 보여주기
-      let orifileCallPath = encodeURIComponent(
-        item.uploadPath + "\\" + item.uuid + "_" + item.fileName
-      );
+      let orifileCallPath = encodeURIComponent(item.uploadPath + "\\" + item.uuid + "_" + item.fileName);
 
       str += "<li data-path='" + item.uploadPath + "' data-uuid='" + item.uuid + "' ";
       str += "data-filename='" + item.fileName + "'data-type='" + item.fileType + "'>";
       str += "<a href='/display?fileName=" + orifileCallPath + "' data-lightbox='image'>";
-      str +=
-        "<div class='text-center'><img src='/display?fileName=" + fileCallPath + "'></a></div>";
+      str += "<div class='text-center'><img src='/display?fileName=" + fileCallPath + "'></a></div>";
       str += "<small>" + item.fileName + "</small> ";
-      str +=
-        "<button type='button' class='btn btn-sm btn-circle btn-warning' data-file='" +
-        fileCallPath +
-        "' data-type='image'> X </button>";
+      str += "<button type='button' class='btn btn-sm btn-circle btn-warning' data-file='" + fileCallPath + "' data-type='image'> X </button>";
       str += "</li>";
     } else {
       // txt 파일 경로 생성
-      let fileCallPath = encodeURIComponent(
-        item.uploadPath + "\\" + item.uuid + "_" + item.fileName
-      );
+      let fileCallPath = encodeURIComponent(item.uploadPath + "\\" + item.uuid + "_" + item.fileName);
 
       str += "<li data-path='" + item.uploadPath + "' data-uuid='" + item.uuid + "' ";
       str += "data-filename='" + item.fileName + "'data-type='" + item.fileType + "'>";
       str += "<a href='/download?fileName=" + fileCallPath + "'>";
       str += "<div class='text-center'><img src='/resources/img/txt-file.png'></div>";
       str += "<small>" + item.fileName + "</small></a> ";
-      str +=
-        "<button type='button' class='btn btn-sm btn-circle btn-warning' data-file='" +
-        fileCallPath +
-        "' data-type='file'> X </button>";
+      str += "<button type='button' class='btn btn-sm btn-circle btn-warning' data-file='" + fileCallPath + "' data-type='file'> X </button>";
       str += "</li>";
     }
   });
@@ -82,7 +69,9 @@ function showUploadedFile(uploadResultArr) {
   document.querySelector(".uploadResult ul").insertAdjacentHTML("beforeend", str);
 }
 
-// x 클릭 시 alert() 창 띄우기
+// x 클릭 시 첨부파일 제거
+// register.jsp 에서 사용하는 개념하고 modify.jsp 에서 사용하는 개념은 다름
+
 document.querySelector(".uploadResult").addEventListener("click", (e) => {
   // 자식한테 이벤트가 일어나면 부모에게 전파 ==> 이벤트 전파
   // 실제 이벤트가 발생한 대상이 : 자식 ==> e.target
@@ -101,27 +90,37 @@ document.querySelector(".uploadResult").addEventListener("click", (e) => {
   // x 가 눌러진 li 가져오기
   const li = e.target.closest("li");
 
-  // script 에서 <form> 태그 작성
-  const formData = new FormData();
-  formData.append("fileName", targetFile);
-  formData.append("type", type);
-
-  // /deleteFile?fileName=2023/05/20/test.jpg&type=image => 주소줄이 이렇게 나오고 싶다면 URLSearchParams 쓰면됨
-  //const data = new URLSearchParams(formData);
-
-  fetch("/deleteFile", {
-    method: "post",
-    body: formData,
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("파일 제거 실패");
-      }
-      return response.text();
-    })
-    .then((data) => {
-      console.log(data);
+  // path = '/WEB-INF/views/board/modify.jsp'
+  // path = '/WEB-INF/views/board/register.jsp'
+  if (path.match("modify")) {
+    // modify 요청 처리
+    if (confirm("정말로 파일을 삭제하시겠습니까?")) {
       li.remove();
+    }
+  } else {
+    // register 요청 처리
+    // script 에서 <form> 태그 작성
+    const formData = new FormData();
+    formData.append("fileName", targetFile);
+    formData.append("type", type);
+
+    // /deleteFile?fileName=2023/05/20/test.jpg&type=image => 주소줄이 이렇게 나오고 싶다면 URLSearchParams 쓰면됨
+    //const data = new URLSearchParams(formData);
+
+    fetch("/deleteFile", {
+      method: "post",
+      body: formData,
     })
-    .catch((error) => console.log(error));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("파일 제거 실패");
+        }
+        return response.text();
+      })
+      .then((data) => {
+        console.log(data);
+        li.remove();
+      })
+      .catch((error) => console.log(error));
+  }
 });

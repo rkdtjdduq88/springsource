@@ -2,6 +2,7 @@ package com.spring.service;
 
 import java.util.List;
 
+import com.spring.domain.AttachFileDTO;
 import com.spring.domain.BoardDTO;
 import com.spring.domain.Criteria;
 
@@ -18,4 +19,6 @@ public interface BoardService {
 	public boolean delete(int bno);
 	// 총 게시글 개수
 	public int getTotalCnt(Criteria cri);	
+	// 첨부파일 가져오기
+	public List<AttachFileDTO> getAttachList(int bno);
 }
