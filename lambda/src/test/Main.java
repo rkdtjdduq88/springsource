@@ -7,11 +7,13 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		
-		long A = sc.nextLong();
-		long B = sc.nextLong();
-		long C = sc.nextLong();
+		int num = sc.nextInt();
 		
-		System.out.println(A+B+C);
+		if(num%4==0 && num%100!=0 || num%400==0) {
+			System.out.println("1");
+		}else {
+			System.out.println("0");
+		}
 	}
 
 }

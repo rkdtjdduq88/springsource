@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,10 +46,13 @@ public class BoardController {
 		model.addAttribute("list", list);
 		model.addAttribute("pageDTO", new PageDTO(cri, total));
 	}
+	@PreAuthorize("isAuthenticated()") // 너 인증정보 가지고 있니?
 	@GetMapping("/register")
 	public void registerGet() {
 		log.info("글쓰기 폼 요청");
 	}
+	
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/register")
 	public String registerPost(BoardDTO dto,RedirectAttributes rttr, Criteria cri) {
 		log.info("글쓰기 등록 요청");
@@ -79,6 +83,7 @@ public class BoardController {
 		BoardDTO dto = service.getRow(bno);
 		model.addAttribute("dto", dto);		
 	}
+	@PreAuthorize("principal.username == #dto.writer") // 로그인 사용자 == 작성자
 	@PostMapping("/modify")
 	public String modifyPost(BoardDTO dto,RedirectAttributes rttr, Criteria cri) {		
 		// 성공 시 리스트
@@ -94,9 +99,10 @@ public class BoardController {
 		rttr.addAttribute("keyword", cri.getKeyword());
 		
 		return "redirect:/board/list";			
-	}
+	}	
 	@GetMapping("/remove")
-	public String removeGet(int bno,RedirectAttributes rttr, Criteria cri) {
+	@PreAuthorize("principal.username == #writer") // 로그인 사용자 == 작성자
+	public String removeGet(int bno,String writer, RedirectAttributes rttr, Criteria cri) {
 		log.info("게시글 삭제");
 		//폴더에서 첨부 파일 제거
 		List<AttachFileDTO> attachList = service.getAttachList(bno);
