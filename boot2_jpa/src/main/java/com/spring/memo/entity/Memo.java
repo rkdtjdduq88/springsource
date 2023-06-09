@@ -15,6 +15,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity // 클래스를 엔티티로 선언(DB에 테이블 생성됨)
+//@Table(name="memos")
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString @Getter @Setter
